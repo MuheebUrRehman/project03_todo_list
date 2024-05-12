@@ -3,7 +3,7 @@ import inquirer from "inquirer";
 import chalk from "chalk";
 let todo: string[] = [];
 let condition = true;
-console.log(chalk.blueBright.bold("\n \t Welcome to todo-list by muheeb \n"));
+console.log(chalk.blueBright.bold("\n \t Welcome to TODO-LIST by muheeb \n"));
 
 let main = async () => {
   while (condition) {
@@ -13,23 +13,23 @@ let main = async () => {
         type: "list",
         message: "select an option you want to do",
         choices: [
-          "add task",
-          "delete task",
-          "update task",
-          "view todo-list",
-          "exit",
+          "Create task",
+          "Update task",
+          "Read todo-list",
+          "Delete task",
+          "Exit",
         ],
       },
     ]);
-    if (option.choices === "add task") {
+    if (option.choices === "Create task") {
       await addtask();
-    } else if (option.choices === "delete task") {
-      await deletetask();
-    } else if (option.choices === "update task") {
+    } else if (option.choices === "Update task") {
       await updatetask();
-    } else if (option.choices === "view todo-list") {
+    } else if (option.choices === "Read todo-list") {
       await viewtask();
-    } else if (option.choices === "exit") {
+    } else if (option.choices === "Delete task") {
+      await deletetask();
+    } else if (option.choices === "Exit") {
       condition = false;
     }
   }
@@ -46,6 +46,29 @@ let addtask = async () => {
   ]);
   todo.push(newtask.task);
   console.log(`\n ${newtask.task} task added successfull to todo-list`);
+};
+
+//function to update a task
+let updatetask = async () => {
+  await viewtask();
+  let update_task_index = await inquirer.prompt([
+    {
+      name: "index",
+      type: "number",
+      message: "enter the index no. of the task you want to update",
+    },
+    {
+      name: "newtask",
+      type: "input",
+      message: "enter new task ",
+    },
+  ]);
+  todo[update_task_index.index - 1] = update_task_index.newtask;
+  console.log(
+    `\n task at index no. ${
+      update_task_index.index - 1
+    } updated successfully[for updated list check option "Read todo-list"]`
+  );
 };
 
 //function to view all task in todos
@@ -72,25 +95,4 @@ let deletetask = async () => {
   );
 };
 
-//function to update a task
-let updatetask = async () => {
-  await viewtask();
-  let update_task_index = await inquirer.prompt([
-    {
-      name: "index",
-      type: "number",
-      message: "enter the index no. of the task you want to update",
-    },
-    {
-      name: "newtask",
-      type: "input",
-      message: "enter new task ",
-    },
-  ]);
-  todo[update_task_index.index - 1] = update_task_index.newtask;
-  console.log(
-    `\n task at index no. ${update_task_index.index - 1
-    } updated successfully[for updated list check option "view todo-list"]`
-  );
-};
 main();
